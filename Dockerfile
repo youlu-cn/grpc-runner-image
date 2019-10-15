@@ -46,6 +46,6 @@ COPY --from=1 /grpc/bins/opt/grpc_objective_c_plugin /usr/local/bin/protoc-gen-o
 COPY --from=0 /go/bin/* /usr/local/bin/
 
 # GOPATH, proto including files required
-COPY --from=0 /go/src /data/golang/src
-ENV GOPATH /data/golang
+COPY --from=0 /go/src /go/src
+ENV GOPATH /go
 
