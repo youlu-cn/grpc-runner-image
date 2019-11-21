@@ -47,5 +47,7 @@ COPY --from=0 /go/bin/* /usr/local/bin/
 
 # GOPATH, proto including files required
 COPY --from=0 /go/src /go/src
+
 ENV GOPATH /go
 
+WORKDIR /mnt
