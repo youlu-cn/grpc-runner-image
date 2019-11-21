@@ -5,7 +5,8 @@ RUN go get github.com/golang/protobuf/protoc-gen-go && \
 	go get github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger && \
 	go get github.com/lnnujxxy/protoc-gen-validate && \
 	go get github.com/youlu-cn/grpc-gen/protoc-gen-auth && \
-	go get github.com/youlu-cn/grpc-gen/protoc-gen-markdown
+	go get github.com/youlu-cn/grpc-gen/protoc-gen-markdown && \
+	go get github.com/youlu-cn/grpc-gen/protoc-gen-dart-export
 
 FROM gcc:6
 
