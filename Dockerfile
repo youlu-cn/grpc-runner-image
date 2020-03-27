@@ -33,19 +33,19 @@ ENV WEB_GRPC_VER 1.0.7
 
 # Jessie has been archived; sources.list should be updated
 RUN echo "deb http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list && \
-	echo 'Acquire::Check-Valid-Until no;' > /etc/apt/apt.conf.d/99no-check-valid-until
-
-# protoc-gen-dart
-RUN apt update && apt install -y apt-transport-https make curl && \
-	sh -c 'curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -' && \
-	sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list' && \
-	apt update && apt install -y dart && \
-	/usr/lib/dart/bin/pub global activate protoc_plugin && ln -s /root/.pub-cache/bin/protoc-gen-dart /usr/local/bin/
+	echo 'Acquire::Check-Valid-Until no;' > /etc/apt/apt.conf.d/99no-check-valid-until && \
+	apt update && apt install -y apt-transport-https make curl unzip
 
 # protoc
 RUN curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VER}/protoc-${PROTOC_VER}-linux-x86_64.zip && \
 	unzip protoc-${PROTOC_VER}-linux-x86_64.zip -d protoc3 && mv protoc3/bin/* /usr/local/bin/ && mv protoc3/include/* /usr/local/include/ && \
 	rm -rf protoc-${PROTOC_VER}-linux-x86_64.zip protoc3
+
+# protoc-gen-dart
+RUN sh -c 'curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -' && \
+	sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list' && \
+	apt update && apt install -y dart && \
+	/usr/lib/dart/bin/pub global activate protoc_plugin && ln -s /root/.pub-cache/bin/protoc-gen-dart /usr/local/bin/
 
 # protoc-gen-grpc-java
 RUN curl -OL https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/${JAVA_GRPC_VER}/protoc-gen-grpc-java-${JAVA_GRPC_VER}-linux-x86_64.exe && \
