@@ -22,7 +22,7 @@ RUN cd /root && dotnet new console && \
 	dotnet add package Grpc.Tools --version ${PLUGIN_VER} && \
 	cp /root/.nuget/packages/grpc.tools/${PLUGIN_VER}/tools/linux_x64/grpc_csharp_plugin /usr/local/bin/grpc_csharp_plugin
 
-FROM java:8
+FROM debian:jessie
 
 # Protocol Buffers version: https://github.com/protocolbuffers/protobuf/releases/latest
 ENV PROTOC_VER 3.11.4
@@ -30,12 +30,6 @@ ENV PROTOC_VER 3.11.4
 ENV JAVA_GRPC_VER 1.28.0
 # protoc-gen-grpc-web version: https://github.com/grpc/grpc-web/releases/latest
 ENV WEB_GRPC_VER 1.0.7
-
-# Source
-RUN echo "deb http://mirrors.163.com/debian/ jessie main non-free contrib" > /etc/apt/sources.list && \
-	echo "deb http://mirrors.163.com/debian/ jessie-updates main non-free contrib" >> /etc/apt/sources.list && \
-    echo "deb http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib" >> /etc/apt/sources.list && \
-	rm -rf /etc/apt/sources.list.d/*
 
 # protoc
 RUN curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VER}/protoc-${PROTOC_VER}-linux-x86_64.zip && \
@@ -65,6 +59,7 @@ RUN curl -OL https://github.com/grpc/grpc-web/releases/download/${WEB_GRPC_VER}/
 COPY --from=2 /usr/local/bin/grpc_csharp_plugin /usr/local/bin/grpc_csharp_plugin
 
 # protoc-gen-objcgrpc
+COPY --from=1 /usr/local/lib64/libstdc++.so.6.0.22 /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.20
 COPY --from=1 /grpc/bins/opt/grpc_objective_c_plugin /usr/local/bin/protoc-gen-objcgrpc
 
 # go binaries
